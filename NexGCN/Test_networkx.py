@@ -14,7 +14,7 @@ from keras.models import Sequential, Model
 from keras import initializers, regularizers,activations,constraints
 import keras.backend as k
 from tensorflow.keras.layers import Layer,Input
-from keras.optimizers import adam
+from keras.optimizers import Adam
 import numpy as np
 from networkx import to_numpy_matrix, degree_centrality, betweenness_centrality, shortest_path_length,in_degree_centrality,out_degree_centrality,eigenvector_centrality,katz_centrality,closeness_centrality
 import matplotlib.pyplot as plt
