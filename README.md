@@ -5,6 +5,14 @@
 This library is a modified binary semi supervised classification implementation of Semi Supervised Classification with Graph Convolution Network(Thomas Kipf et.al 2016) .Link:[https://arxiv.org/pdf/1609.02907v4.pdf]. This is compatible with Keras and Tensorflow (keras version >=2.0.6).
 The library builds a semi supervised binary classification kernel by using networkx graphs as inputs along with features. Features like statistical centrality metrics, randomised distributions as well as weights are provided as additional kernels for evaluation. An example can be to classify the nodes of the Graph using Katz Centrality as the feature vector over the Deep GCN layer. Additional feature vectors can be provided manually as well.
 
+## Dependencies
+
+<a href="https://www.tensorflow.org/">Tensorflow</a>
+
+<a href="https://keras.io/">Keras</a>
+
+<a href="https://networkx.github.io/">NetworkX</a>
+
 ## Usability
 
 The library or the Layer is compatible with Tensorflow and Keras. Installation is carried out using the pip command as follows:
