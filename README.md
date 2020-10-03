@@ -115,6 +115,8 @@ The training steps almost reaches 99.8% percent accuracy and the screenshot is s
 
 The training on Zachary Karate Club is present in the examples (Test,Test_networkx and Test_pandas python files):
 NexGCN for Binary Classification on Zachary Karate Club using Katz centrality
+
+
 <img src="https://github.com/abhilash1910/NexGCN/blob/master/Images/gcn_zakary1-katz_centrality.png"></img>
 
 ## Further Development
