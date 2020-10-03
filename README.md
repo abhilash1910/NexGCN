@@ -2,7 +2,7 @@
 
 ## A Spectral Sigmoid Graph Convolution Network Library for Networkx Graphs compatible with Keras-Tensorflow :robot:
 
-This library is a modified binary semi supervised classification implementation of Semi Supervised Classification with Graph Convolution Network(Thomas Kipf et.al 2016) .Link:[https://arxiv.org/pdf/1609.02907v4.pdf]. This is compatible with Keras and Tensorflow (keras version >=2.0.6, Tensorflow>=1.14).
+This library is a modified binary semi supervised classification implementation of Semi Supervised Classification with Graph Convolution Network[Thomas Kipf et.al 2016](https://arxiv.org/pdf/1609.02907v4.pdf). This is compatible with Keras and Tensorflow (keras version >=2.0.6, Tensorflow>=1.14).
 The library builds a semi supervised binary classification kernel by using networkx graphs as inputs along with features. Features like statistical centrality metrics, randomised distributions as well as weights are provided as additional kernels for evaluation. An example can be to classify the nodes of the Graph using Katz Centrality as the feature vector over the Deep GCN layer. Additional feature vectors can be provided manually as well.
 
 ## Dependencies
@@ -114,7 +114,10 @@ The training steps almost reaches 99.8% percent accuracy and the screenshot is s
 <img src="https://github.com/abhilash1910/NexGCN/blob/master/Training.PNG">Training on NexGCN</img>
 
 The training on Zachary Karate Club is present in the examples (Test,Test_networkx and Test_pandas python files):
-<img src="https://github.com/abhilash1910/NexGCN/blob/master/Images/gcn_zakary1-katz_centrality.png">NexGCN for Binary Classification on Zachary Karate Club using Katz centrality</img>
+NexGCN for Binary Classification on Zachary Karate Club using Katz centrality
+
+
+<img src="https://github.com/abhilash1910/NexGCN/blob/master/Images/gcn_zakary1-katz_centrality.png"></img>
 
 ## Further Development
 
