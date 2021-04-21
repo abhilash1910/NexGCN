@@ -32,9 +32,9 @@ X=kernel.feature_distributions(np.random.poisson(6,10),G)
 print(X)
 exp.create_network(G,X,None)
 
-predictions=exp.extract_binary_features(128,2,keras.activations.sigmoid,'adam',5,20,1)
+predictions=exp.extract_features(128,2,keras.activations.sigmoid,'adam',5,20,1)
 print(predictions)
-exp.draw_graph(predictions,exp.network.F.shape[-1],300,False,90,90,'#00FFFF','#0F00FF')
+exp.draw_graph(predictions,exp.network.F.shape[-1],300,False,90,90)
 output_class=exp.get_outcome(2)
 
 print(output_class)

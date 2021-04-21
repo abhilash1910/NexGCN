@@ -37,6 +37,7 @@ class GraphNeuralNetwork(Layer):
         )
         self.b = self.add_weight(shape=(self.units,), initializer=self.bias_initializer,regularizer=self.bias_regularizer, trainable=True)
         
+        
     def call(self,inp):
         temp=k.dot(inp,self.features)
         output=k.dot(temp,self.w)
@@ -82,13 +83,13 @@ class Network():
         self.D=np.array(np.sum(self.A,axis=0))[0]
         self.D=np.matrix(np.diag(self.D))
         self.F=(self.D**(-1)*self.A)
-                
+        
         
     def convert_tensor(self):
             
         self.A=k.constant(self.A)
         self.X=k.constant(self.X)
-        #self.A_hat=k.constant(self.A_hat)
+        self.A_hat=k.constant(self.A_hat)
         self.I=k.constant(self.I)
         self.D=k.constant(self.D)
         self.F=k.constant(self.F)
@@ -112,48 +113,53 @@ class ExperimentalGCN():
         self.model.add(Dropout(0.5))
         self.model.add(Dense(units=units,activation=activation))
         return self.model
-    def extract_binary_features(self,units,output_feature_shape,activation,optimizer,epochs,steps_p_epoch,pred_steps):
+    def extract_features(self,units,output_feature_shape,activation,optimizer,epochs,steps_p_epoch,pred_steps):
 
         self.inp=Input(tensor=(self.network.F))
         self.units=units
-        self.shape=self.F.shape[-1]
+        self.shape=self.network.A_hat.shape[-1]
         self.output_feature_shape=output_feature_shape
-        self.features=self.network.I
+        self.features=self.network.A_hat
+        self.intermediate_activation=keras.activations.relu
         self.activation=activation
         self.epochs=epochs
         self.steps_p_epoch=steps_p_epoch
         self.pred_steps=pred_steps
         self.optimizer=optimizer
-        self.model=self.GCN(self.network.F,self.units,self.shape,self.features,self.activation)    
+        self.model=self.GCN(self.network.F,self.units,self.shape,self.features,self.intermediate_activation)  
         self.model=self.GCN(self.network.F,self.output_feature_shape,self.model.layers[1].output.shape[-1],self.model.layers[1].output,keras.activations.sigmoid)    
         self.model.summary()
-        self.model.compile(loss='binary_crossentropy',optimizer=self.optimizer,metrics=['accuracy'])
+        self.model.compile(loss='binary_crossentropy',optimizer=self.optimizer,metrics=["accuracy"])
         self.model.fit(self.network.F,epochs=epochs,batch_size=self.network.F.shape[-1],steps_per_epoch=self.steps_p_epoch)
         predictions=self.model.predict(self.network.F,steps=self.pred_steps)
         return predictions
         
-    def draw_graph(self,predictions,shape,node_size,with_labels,dim_1,dim_2,clr_1,clr_2):
+    def draw_graph(self,predictions,shape,node_size,with_labels,dim_1,dim_2):
         
-        self.cls1color = clr_1
-        self.cls2color = clr_2
+       
         self.pos = {}
+        self.shape=shape
+        keys=range(predictions.shape[1])
+        cols=range(predictions.shape[1])
+        for i in keys:
+            self.pos[i]=cols[i]
         self.colors = []
+        self.idx=[]
         for v in range(shape):
-            self.pos[v] = predictions[v]
-            self.cls = self.pos[v].argmax()
-            self.colors.append(self.cls1color if self.cls else self.cls2color)
+            max_idx = predictions[v].argmax()
+            self.cls = self.pos[max_idx]
+            self.idx.append(predictions[v].argmax())
+            self.colors.append(self.cls)
         nx.draw(self.network.G, node_color=self.colors,with_labels=with_labels, node_size=node_size)
         fig = plt.figure(figsize=(dim_1,dim_2))
         fig.clf()
         plt.show()
-        
+        return self.idx        
     def get_outcome(self,node):
-        out_class=[0,1]
-        clr=self.colors[node]
-        if clr==self.cls1color:
-            return out_class[0]
-        else:
-            return out_class[1]
+        out_class=self.idx[node-1]
+        assert node-1<self.shape
+        return out_class
+        
         
 class feature_kernels():
     def centrality_kernel(self,centrality,Graph):
@@ -202,25 +208,3 @@ class feature_kernels():
         
 
         
-#Gr = nx.gnm_random_graph(70,140)
-#exp=ExperimentalGCN()
-#kernel=feature_kernels()
-#X=kernel.centrality_kernel(katz_centrality,Gr)
-#X=kernel.feature_random_weight_kernel(34,Gr)
-#X=kernel.feature_distributions(np.random.poisson(4,9),Gr)
-
-#exp.create_network(Gr,X,False)
-#print(exp.network.X.shape)
-# Xs=np.matrix([
-#                 [np.random.randn(),np.random.randn(),np.random.randn()]
-#                for j in range(exp.network.A.shape[0])
-#                 ])
-#
-# exp.create_network(None,Xs,True)
-#
-#predictions=exp.extract_binary_features(1024,2,keras.activations.sigmoid,'adam',5,20,1)
-#print(predictions)
-#exp.draw_graph(predictions,exp.network.F.shape[-1],300,True,90,90,'#00FFFF','#FF00FF')
-#output_class=exp.get_outcome(69)
-
-#print(output_class)

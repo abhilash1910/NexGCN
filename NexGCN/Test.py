@@ -20,25 +20,85 @@ from networkx import to_numpy_matrix, degree_centrality, betweenness_centrality,
 import matplotlib.pyplot as plt
 import NexGCN as venom
 
+
+print("===============Hyperparameters===============")
+no_op_features=3
+no_epochs=50
+no_steps_per_epoch=30
+no_pred_steps=3
+kernel_size=1024
+feature_random_weight=34
+distance_param=True
+node_size=300
+with_labels=True
+dim_1=90
+dim_2=90
+activation=keras.activations.softmax
+optimizer='adam'
+
+
+print("================== First Example: Uniform Features ===============")
 Gr = nx.gnm_random_graph(70,140)
 exp=venom.ExperimentalGCN()
 kernel=venom.feature_kernels()
-#X=kernel.centrality_kernel(katz_centrality,Gr)
-X=kernel.feature_random_weight_kernel(34,Gr)
-#X=kernel.feature_distributions(np.random.poisson(4,9),Gr)
+X=kernel.feature_random_weight_kernel(feature_random_weight,Gr)
+exp.create_network(Gr,X,distance_param)
+predictions=exp.extract_features(kernel_size,no_op_features,activation,optimizer,no_epochs,no_steps_per_epoch,no_pred_steps)
+print("Predictions: ",predictions)
+output_classes=exp.draw_graph(predictions,Gr.number_of_nodes(),node_size,with_labels,dim_1,dim_2)
+node_num=56
+unique_output_class=exp.get_outcome(node_num)
+print(unique_output_class)
+print("======================== Completed Sample ========================")
 
+
+
+print("================== Second Example: Centrality Based Features ===============")
+
+Gr = nx.gnm_random_graph(70,140)
+exp=venom.ExperimentalGCN()
+kernel=venom.feature_kernels()
+X=kernel.centrality_kernel(katz_centrality,Gr)
 exp.create_network(Gr,X,True)
-# Xs=np.matrix([
-#                 [np.random.randn(),np.random.randn(),np.random.randn()]
-#                for j in range(exp.network.A.shape[0])
-#                 ])
-#
-# exp.create_network(None,Xs,True)
-#
-predictions=exp.extract_binary_features(2048,2,keras.activations.sigmoid,'adam',5,20,1)
-print(predictions)
-exp.draw_graph(predictions,exp.network.F.shape[-1],300,True,90,90,'#00FFFF','#FF00FF')
-output_class=exp.get_outcome(37)
+predictions=exp.extract_features(kernel_size,no_op_features,activation,optimizer,no_epochs,no_steps_per_epoch,no_pred_steps)
+print("Predictions: ",predictions)
+output_classes=exp.draw_graph(predictions,Gr.number_of_nodes(),node_size,with_labels,dim_1,dim_2)
+node_num=56
+unique_output_class=exp.get_outcome(node_num)
+print(unique_output_class)
+print("======================== Completed Sample ========================")
 
-print(output_class)
+print("================== Third Example: Distribution Based Features ===============")
 
+Gr = nx.gnm_random_graph(70,140)
+exp=venom.ExperimentalGCN()
+kernel=venom.feature_kernels()
+X=kernel.feature_distributions(np.random.poisson(4,9),Gr)
+exp.create_network(Gr,X,True)
+predictions=exp.extract_features(kernel_size,no_op_features,activation,optimizer,no_epochs,no_steps_per_epoch,no_pred_steps)
+print("Predictions: ",predictions)
+output_classes=exp.draw_graph(predictions,Gr.number_of_nodes(),node_size,with_labels,dim_1,dim_2)
+node_num=56
+unique_output_class=exp.get_outcome(node_num)
+print(unique_output_class)
+print("======================== Completed Sample ========================")
+
+
+print("================== Fourth Example: Manual Features ===============")
+
+Gr = nx.gnm_random_graph(70,140)
+exp=venom.ExperimentalGCN()
+no_nodes=Gr.number_of_nodes()
+kernel=venom.feature_kernels()
+X=np.matrix([
+                [np.random.randn(),np.random.randn(),np.random.randn()]
+               for j in range(no_nodes)
+                ])
+exp.create_network(Gr,X,True)
+predictions=exp.extract_features(kernel_size,no_op_features,activation,optimizer,no_epochs,no_steps_per_epoch,no_pred_steps)
+print("Predictions: ",predictions)
+output_classes=exp.draw_graph(predictions,Gr.number_of_nodes(),node_size,with_labels,dim_1,dim_2)
+node_num=56
+unique_output_class=exp.get_outcome(node_num)
+print(unique_output_class)
+print("======================== Completed Sample ========================")
