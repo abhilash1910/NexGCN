@@ -17,14 +17,14 @@ setup(
   author = 'ABHILASH MAJUMDER',
   author_email = 'debabhi1396@gmail.com',
   url = 'https://github.com/abhilash1910/NexGCN',   
-  download_url = 'https://github.com/abhilash1910/NexGCN/archive/v_0.2.tar.gz/',    
+  download_url = 'https://github.com/abhilash1910/NexGCN/archive/v_0.4.tar.gz/',    
   keywords = ['graph_convolution_network', 'binary classification', 'GCN','graph neural network','Spectral GCN','Networkx GCN','centrality GCN','keras GCN','sigmoid Graph convolution network'],   
   install_requires=[           
 
           'numpy',         
           'matplotlib',
-          'keras==2.3.1',
-          'tensorflow==1.15',
+          'keras',
+          'tensorflow',
           'pandas',
           'networkx'
       ],
