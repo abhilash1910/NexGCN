@@ -18,7 +18,7 @@ The library builds a semi supervised binary classification kernel by using netwo
 The library or the Layer is compatible with Tensorflow and Keras. Installation is carried out using the pip command as follows:
 
 ```python
-pip install NexGCN==0.1
+pip install NexGCN==0.3
 ```
 
 For using inside the Jupyter Notebook or Python IDE (along with Keras layers):
