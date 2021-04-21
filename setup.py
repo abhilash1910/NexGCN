@@ -11,7 +11,7 @@ from distutils.core import setup
 setup(
   name = 'NexGCN',         
   packages = ['NexGCN'],   
-  version = '0.2',       
+  version = '0.3',       
   license='MIT',        
   description = 'A Spectral Sigmoid Graph Convolution Network Library for binary classification on Networkx Graphs compatible with Keras and Tensorflow',   
   author = 'ABHILASH MAJUMDER',
