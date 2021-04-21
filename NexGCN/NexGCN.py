@@ -18,7 +18,9 @@ from keras.optimizers import Adam
 import numpy as np
 from networkx import to_numpy_matrix, degree_centrality, betweenness_centrality, shortest_path_length,in_degree_centrality,out_degree_centrality,eigenvector_centrality,katz_centrality,closeness_centrality
 import matplotlib.pyplot as plt
+from tensorflow.python.framework.ops import disable_eager_execution
 
+disable_eager_execution()
 class GraphNeuralNetwork(Layer):
     def __init__(self, units, input_dim,activation,kernel_initializer,kernel_regularizer,bias_initializer,bias_regularizer,features):
         self.units=units
@@ -105,7 +107,7 @@ class ExperimentalGCN():
     
 
         self.model=keras.Sequential()
-        self.model.add(Input(tensor=self.inp))
+        self.model.add(Input(tensor=inp))
         self.model.add(GraphNeuralNetwork(self.units,int(self.shape),keras.activations.relu,keras.initializers.glorot_uniform,None,keras.initializers.zeros,None,self.features))
         self.model.add(Dropout(0.5))
         self.model.add(Dense(units=units,activation=activation))
@@ -122,8 +124,8 @@ class ExperimentalGCN():
         self.steps_p_epoch=steps_p_epoch
         self.pred_steps=pred_steps
         self.optimizer=optimizer
-        self.model=self.GCN(self.inp,self.units,self.shape,self.features,self.activation)    
-        self.model=self.GCN(self.inp,self.output_feature_shape,self.model.layers[1].output.shape[-1],self.model.layers[1].output,keras.activations.sigmoid)    
+        self.model=self.GCN(self.network.F,self.units,self.shape,self.features,self.activation)    
+        self.model=self.GCN(self.network.F,self.output_feature_shape,self.model.layers[1].output.shape[-1],self.model.layers[1].output,keras.activations.sigmoid)    
         self.model.summary()
         self.model.compile(loss='binary_crossentropy',optimizer=self.optimizer,metrics=['accuracy'])
         self.model.fit(self.network.F,epochs=epochs,batch_size=self.network.F.shape[-1],steps_per_epoch=self.steps_p_epoch)
